@@ -1,7 +1,9 @@
 
 wf=hs.window.filter
+browser = "Brave Browser"
 
 -- Open new / focus existing terminal window in current desktop space
+
 hs.hotkey.bind({"cmd", "ctrl"}, "T", function()
 	wf_iterm2 = wf.new(false):setAppFilter("iTerm2", {currentSpace=true})
 
@@ -24,8 +26,8 @@ hs.hotkey.bind({"cmd", "ctrl"}, "T", function()
 end)
 
 -- Open new / focus existing browser window in current desktop space
+
 hs.hotkey.bind({"cmd", "ctrl"}, "W", function()
-	local browser = "Brave Browser"
 
 	wf_browser = wf.new(false):setAppFilter(browser, {currentSpace=true})
 
@@ -48,14 +50,69 @@ hs.hotkey.bind({"cmd", "ctrl"}, "W", function()
 end)
 
 
--- Window-based application switcher
--- NOTE: This was a mistake
---
--- switcher = hs.window.switcher.new(hs.window.filter.new(false):setCurrentSpace(true):setDefaultFilter{})
--- hs.hotkey.bind('alt','tab','Next window',switcher.nextWindow)
--- hs.hotkey.bind('alt-shift','tab','Previous window',switcher.previousWindow)
+-- Open new / focus existing vscode window in current desktop space
+
+hs.hotkey.bind({"cmd", "ctrl"}, "C", function()
+	local app = "Code"
+
+	wf_app = wf.new(false):setAppFilter(app, {currentSpace=true})
+
+	local wins = wf_app:getWindows()
+	local count = 0
+	for _ in pairs(wins) do count = count + 1 end
+	
+	if (count > 0)
+	then
+		wf_app:getWindows()[1]:focus()
+	else
+
+		hs.osascript.applescript(string.format([[
+			tell application "System Events" to tell process "%s"
+			    click menu item "New Window" of menu "File" of menu bar 1
+				set frontmost to true
+			end tell
+		]], app))
+
+	end
+
+end)
+
+-- Open new / focus existing VimR window in current desktop space
+
+hs.hotkey.bind({"cmd", "ctrl"}, "V", function()
+	local app = "VimR"
+
+	wf_app = wf.new(false):setAppFilter(app, {currentSpace=true})
+
+	local wins = wf_app:getWindows()
+	local count = 0
+	for _ in pairs(wins) do count = count + 1 end
+	
+	if (count > 0)
+	then
+		wf_app:getWindows()[1]:focus()
+	else
+
+		hs.osascript.applescript(string.format([[
+			tell application "System Events" to tell process "%s"
+			    click menu item "New" of menu "File" of menu bar 1
+				set frontmost to true
+			end tell
+		]], app))
+
+	end
+
+end)
+
+
+-- Expose Windows (Mission Control)
+
+hs.hotkey.bind({"alt"}, "tab", function() 
+	hs.application.open("Mission Control"):activate()
+end)
 
 -- Clear clipboard
+
 hs.hotkey.bind({"cmd", "shift", "ctrl"}, "C", function()
 	hs.pasteboard.setContents("")
 	hs.notify.new({title="Bazinga", informativeText="System clipboard has been cleared."}):send()
@@ -87,3 +144,4 @@ hs.hotkey.bind(mash, '[', function() hs.window.focusedWindow():move(units.upleft
 hs.hotkey.bind(mash, ';', function() hs.window.focusedWindow():move(units.botleft50,  nil, true) end)
 hs.hotkey.bind(mash, "'", function() hs.window.focusedWindow():move(units.botright50, nil, true) end)
 hs.hotkey.bind(mash, 'm', function() hs.window.focusedWindow():move(units.maximum,    nil, true) end)
+
