@@ -1,16 +1,15 @@
-
 wf=hs.window.filter
 browser = "Brave Browser"
 
 -- Open new / focus existing terminal window in current desktop space
 
 hs.hotkey.bind({"cmd", "ctrl"}, "T", function()
-	wf_iterm2 = wf.new(false):setAppFilter("iTerm2", {currentSpace=true})
+	wf_iterm2 = wf.new(false):setAppFilter("iTerm2", {currentSpace=true, visible=true})
 
 	local wins = wf_iterm2:getWindows()
 	local count = 0
 	for _ in pairs(wins) do count = count + 1 end
-	
+
 	if (count > 0)
 	then
 		wf_iterm2:getWindows()[1]:focus()
@@ -29,7 +28,7 @@ end)
 
 hs.hotkey.bind({"cmd", "ctrl"}, "W", function()
 
-	wf_browser = wf.new(false):setAppFilter(browser, {currentSpace=true})
+	wf_browser = wf.new(false):setAppFilter(browser, {currentSpace=true, visible=true})
 
 	local wins = wf_browser:getWindows()
 	local count = 0
@@ -49,13 +48,31 @@ hs.hotkey.bind({"cmd", "ctrl"}, "W", function()
 
 end)
 
+-- CHROMIUM-BASED BROWSERS ONLY: Open new tab to right of current browser
+
+hs.hotkey.bind({"cmd", "option"}, "T", function()
+
+	local focusedAppName = hs.window.focusedWindow():application():title()
+
+	if focusedAppName == browser 
+	then
+		hs.osascript.applescript(string.format([[
+			tell application "System Events" to tell process "%s"
+				click menu item "New Tab to the Right" of menu "Tab" of menu bar 1
+			end tell
+		]], focusedAppName))
+	else
+		hs.notify.new({title=string.format("%s not focused.", browser)}):send()
+	end
+
+end)
 
 -- Open new / focus existing vscode window in current desktop space
 
-hs.hotkey.bind({"cmd", "ctrl"}, "C", function()
+hs.hotkey.bind({"cmd", "ctrl"}, "V", function()
 	local app = "Code"
 
-	wf_app = wf.new(false):setAppFilter(app, {currentSpace=true})
+	wf_app = wf.new(false):setAppFilter(app, {currentSpace=true, visible=true})
 
 	local wins = wf_app:getWindows()
 	local count = 0
@@ -77,12 +94,12 @@ hs.hotkey.bind({"cmd", "ctrl"}, "C", function()
 
 end)
 
--- Open new / focus existing VimR window in current desktop space
+-- Open new / focus existing g/n/mac/vim(r) window in current desktop space
 
-hs.hotkey.bind({"cmd", "ctrl"}, "V", function()
-	local app = "VimR"
+hs.hotkey.bind({"cmd", "ctrl"}, "E", function()
+	local app = "MacVim"
 
-	wf_app = wf.new(false):setAppFilter(app, {currentSpace=true})
+	wf_app = wf.new(false):setAppFilter(app, {currentSpace=true, visible=true})
 
 	local wins = wf_app:getWindows()
 	local count = 0
@@ -92,16 +109,32 @@ hs.hotkey.bind({"cmd", "ctrl"}, "V", function()
 	then
 		wf_app:getWindows()[1]:focus()
 	else
-
 		hs.osascript.applescript(string.format([[
 			tell application "System Events" to tell process "%s"
-			    click menu item "New" of menu "File" of menu bar 1
+			    click menu item "New Window" of menu "File" of menu bar 1
 				set frontmost to true
 			end tell
 		]], app))
 
 	end
 
+end)
+
+
+-- Show Desktop (like windows or KDE)
+
+hs.hotkey.bind({"alt"}, "d", function()
+	hs.eventtap.keyStroke({"fn"}, "f11")
+end)
+
+-- Switch Desktops (like windows or KDE)
+
+hs.hotkey.bind({"ctrl", "alt"}, "left", function()
+	hs.eventtap.keyStroke({"ctrl"}, "left")
+end)
+
+hs.hotkey.bind({"ctrl", "alt"}, "right", function()
+	hs.eventtap.keyStroke({"ctrl"}, "right")
 end)
 
 
@@ -115,7 +148,7 @@ end)
 
 hs.hotkey.bind({"cmd", "shift", "ctrl"}, "C", function()
 	hs.pasteboard.setContents("")
-	hs.notify.new({title="Bazinga", informativeText="System clipboard has been cleared."}):send()
+	hs.notify.new({title="Cleared clipboard."}):send()
 end)
 
 -- The ShiftIt Alternative
@@ -144,4 +177,3 @@ hs.hotkey.bind(mash, '[', function() hs.window.focusedWindow():move(units.upleft
 hs.hotkey.bind(mash, ';', function() hs.window.focusedWindow():move(units.botleft50,  nil, true) end)
 hs.hotkey.bind(mash, "'", function() hs.window.focusedWindow():move(units.botright50, nil, true) end)
 hs.hotkey.bind(mash, 'm', function() hs.window.focusedWindow():move(units.maximum,    nil, true) end)
-
