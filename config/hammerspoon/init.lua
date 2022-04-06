@@ -1,6 +1,31 @@
 wf=hs.window.filter
 browser = "Brave Browser"
 
+-- Open new / focus existing Finder window in current desktop space
+
+hs.hotkey.bind({"cmd", "ctrl"}, "A", function()
+	local app = "Finder"
+
+	wf_app = wf.new(false):setAppFilter(app, {currentSpace=true})
+
+	local wins = wf_app:getWindows()
+	local count = 0
+	for _ in pairs(wins) do count = count + 1 end
+	
+	if (count > 0)
+	then
+		wf_app:getWindows()[1]:focus()
+	else
+		hs.osascript.applescript(string.format([[
+			tell application "System Events" to tell process "%s"
+				click menu item "New Finder Window" of menu "File" of menu bar 1
+				set frontmost to true
+			end tell
+		]], app))
+	end
+
+end)
+
 -- Open new / focus existing terminal window in current desktop space
 
 hs.hotkey.bind({"cmd", "ctrl"}, "T", function()
@@ -119,6 +144,13 @@ hs.hotkey.bind({"cmd", "ctrl"}, "E", function()
 	end
 
 end)
+
+-- APP-AGNOSTIC GLOBAL OPEN/FOCUS BINDINGS
+
+hs.hotkey.bind({"cmd", "ctrl"}, "I", function() hs.application.open("Insomnia") end) 
+hs.hotkey.bind({"cmd", "ctrl"}, "D", function() hs.application.open("Discord") end) 
+hs.hotkey.bind({"cmd", "ctrl"}, "O", function() hs.application.open("Obsidian") end) 
+hs.hotkey.bind({"cmd", "ctrl"}, "C", function() hs.application.open("Numi") end) 
 
 
 -- Show Desktop (like windows or KDE)
