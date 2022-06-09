@@ -8,3 +8,10 @@
 <br>
 </div>
 </html>
+
+## Software List (All FOSS)
+
+- [Rectangle](https://github.com/rxhanson/Rectanglehttps://github.com/rxhanson/Rectangle)
+- [Hammerspoon](https://www.hammerspoon.org/)
+- [MiddleClick](https://github.com/artginzburg/MiddleClick-BigSur)
+- [Scroll Reverser](https://github.com/pilotmoon/Scroll-Reverser)
