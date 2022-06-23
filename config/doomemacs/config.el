@@ -32,7 +32,7 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-gruvbox)
+(setq doom-theme 'doom-monokai-spectrum)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -76,14 +76,18 @@
 ;; they are implemented.
 
 ;; treemacs extension
-(setq treemacs-text-scale 1)
-(treemacs-git-mode 'deferred)
-(define-key treemacs-mode-map [mouse-1] #'treemacs-single-click-expand-action) ;; single click to open tree nodes
+(setq treemacs-text-scale 0.7)
+(setq treemacs-git-mode 'deferred)
+(with-eval-after-load 'treemacs
+  (treemacs-display-current-project-exclusively)
+  (setq treemacs-project-follow-mode :true)
+  (define-key treemacs-mode-map [mouse-1] #'treemacs-single-click-expand-action)) ;; single click to open tree nodes
 
 ;; code minimap
-(minimap-move-overlay-mouse [mouse-1])
+;; (setq minimap-move-overlay-mouse [mouse-1])
 
 ;; Rust config
 ;; https://github.com/doomemacs/doomemacs/blob/develop/modules/lang/rust/README.org#enable-rls-by-default
-(setq rustic-lsp-server 'rust-analyzer)
+;; (setq rustic-lsp-server 'rust-analyzer)
+(setq rustic-lsp-server 'rls)
 (setq rustic-lsp-client 'eglot)

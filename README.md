@@ -15,3 +15,5 @@
 - [Hammerspoon](https://www.hammerspoon.org/)
 - [MiddleClick](https://github.com/artginzburg/MiddleClick-BigSur)
 - [Scroll Reverser](https://github.com/pilotmoon/Scroll-Reverser)
+- [AltTab MacOS](https://github.com/lwouis/alt-tab-macos)
+
