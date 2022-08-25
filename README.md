@@ -1,4 +1,3 @@
-<html>
 <div align="center">
 <h1>macOS setup</h1>
 <br>
@@ -7,7 +6,6 @@
 <img src="./neofetch.png" style="width:500px"/>
 <br>
 </div>
-</html>
 
 ## Software List (All FOSS)
 
