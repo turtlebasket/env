@@ -1,8 +1,13 @@
-# Modified from: https://gist.github.com/charlietran/43639b0f4e0a01c7c20df8f1929b76f2?permalink_comment_id=2737814#gistcomment-2737814
+# From: https://gregrs-uk.github.io/2018-11-01/open-files-neovim-iterm2-macos-finder/
 # Instructions: 
 # - Create new application in Automator
 # - Add "run applescript" step
 # - Paste in the below script 
+# From: https://gregrs-uk.github.io/2018-11-01/open-files-neovim-iterm2-macos-finder/
+# Instructions: 
+# - Create new application in Automator
+# - Add "run applescript" step
+# - Paste in the below script
 
 on run {input, parameters}
 	set myPath to POSIX path of input
@@ -14,4 +19,3 @@ on run {input, parameters}
 		end tell
 	end tell
 end run
-
