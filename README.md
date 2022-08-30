@@ -1,17 +1,24 @@
-<div align="center">
-<h1>macOS setup</h1>
-<br>
-<p>Full circle it is, then.</p>
-<br>
-<img src="./neofetch.png" style="width:500px"/>
-<br>
-</div>
+# Environment
 
-## Software List (All FOSS)
+Here, we may observe the turtlebasket in its natural habitat.
 
-- [Rectangle](https://github.com/rxhanson/Rectanglehttps://github.com/rxhanson/Rectangle)
+## MacOS
+
+### Software List (All FOSS)
+
 - [Hammerspoon](https://www.hammerspoon.org/)
+- [Rectangle](https://github.com/rxhanson/Rectanglehttps://github.com/rxhanson/Rectangle)
 - [MiddleClick](https://github.com/artginzburg/MiddleClick-BigSur)
 - [Scroll Reverser](https://github.com/pilotmoon/Scroll-Reverser)
 - [AltTab MacOS](https://github.com/lwouis/alt-tab-macos)
+
+## Windows
+
+### Software List
+
+- AutoHotKey
+- Windows Terminal
+- ShareX
+- Powershell Core
+- WSL (native feature)
 
