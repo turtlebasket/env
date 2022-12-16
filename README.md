@@ -4,25 +4,26 @@
 ![Fedora](https://img.shields.io/badge/Fedora-294172?style=for-the-badge&logo=fedora&logoColor=white)
 ![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
 
-Here, we may observe the turtlebasket in its natural habitat.
+## Contents
 
-## MacOS
+- [Configs](./config/)
+- [Old setup stuff](./setup/)
+- [Misc. scripts](./scripts/)
 
-### Software List (All FOSS)
+## Software List
+
+### MacOS
 
 - [Hammerspoon](https://www.hammerspoon.org/)
 - [Rectangle](https://github.com/rxhanson/Rectanglehttps://github.com/rxhanson/Rectangle)
 - [MiddleClick](https://github.com/artginzburg/MiddleClick-BigSur)
-- [LinearMouse] (https://linearmouse.org/)
+- [LinearMouse](https://linearmouse.org/)
 - [AltTab MacOS](https://github.com/lwouis/alt-tab-macos)
 
-## Windows
-
-### Software List
+### Windows
 
 - AutoHotKey
-- Windows Terminal
 - ShareX
 - Powershell Core
+- Windows Terminal
 - WSL (native feature)
-

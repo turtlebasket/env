@@ -33,18 +33,25 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
 Plug 'mangeshrex/everblush.vim'
 Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
-" Plug 'nvim-lua/plenary.nvim'
-" Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
 Plug 'akinsho/toggleterm.nvim', {'tag' : 'v1.*'}
-
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
 Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'jiangmiao/auto-pairs'
 
 Plug 'dhruvasagar/vim-table-mode'
+
+" Svelte
+" Plug 'othree/html5.vim'
+" Plug 'pangloss/vim-javascript'
+" Plug 'evanleck/vim-svelte', {'branch': 'main'}
 call plug#end()
 
 " Lua Plugins
-" lua require('plugins')
+lua require('plugins')
 
 " Theming
 set termguicolors
@@ -60,6 +67,10 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 if exists("g:neovide")
 	set guifont=CaskaydiaCove\ Nerd\ Font:h12.5
 endif
+
+" Start up plugins
+autocmd VimEnter * :COQnow
+autocmd VimEnter * :TSEnable highlight
 
 " Navigation & Shortcuts
 
@@ -81,6 +92,14 @@ nnoremap <C-w>d :close<CR>
 " Close the current tab
 nnoremap <Leader>td :tabclose<CR>
 nnoremap <Leader>tk :tabclose<CR>
+
+" Search for files
+nnoremap <Leader><Leader> :Telescope find_files<CR>
+nnoremap <Leader>ff :Telescope find_files<CR>
+
+" Git status
+nnoremap <Leader>gs :Telescope git_status<CR>
+nnoremap <Leader>gc :Telescope git_commits<CR>
 " map <Leader>bk :bd!<CR>
 
 " Reload config

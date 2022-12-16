@@ -72,7 +72,8 @@ end)
 
 hs.hotkey.bind({"cmd", "ctrl"}, "W", function()
 
-	wf_browser = wf.new(false):setAppFilter(browser, {currentSpace=true, visible=true})
+	-- wf_browser = wf.new(false):setAppFilter(browser, {currentSpace=true}):setScreens({hs.screen.mainScreen()})
+	wf_browser = wf.new(false):setAppFilter(browser, {currentSpace=true})
 
 	local wins = wf_browser:getWindows()
 	local count = 0
@@ -112,10 +113,8 @@ hs.hotkey.bind({"cmd", "option"}, "T", function()
 end)
 
 -- Open new / focus existing vscode window in current desktop space
-
-hs.hotkey.bind({"cmd", "ctrl"}, "V", function()
-	local app = "Code"
-
+-- app = VSCodium or Code
+function openVsCode(app)
 	wf_app = wf.new(false):setAppFilter(app, {currentSpace=true, visible=true})
 
 	local wins = wf_app:getWindows()
@@ -136,39 +135,59 @@ hs.hotkey.bind({"cmd", "ctrl"}, "V", function()
 
 	end
 
+end
+
+hs.hotkey.bind({"cmd", "ctrl"}, "E", function()
+	-- openVsCode("VSCodium")
+	openVsCode("Code")
 end)
+
+hs.hotkey.bind({"cmd", "ctrl"}, "V", function()
+	-- openVsCode("Code")
+	-- openVsCode("VSCodium")
+	
+	-- No neovide function because it doesn't support system events (yet)
+	hs.application.open("Neovide")
+end)
+
+
 
 -- Open new / focus existing g/n/mac/vim(r) window in current desktop space
 
-hs.hotkey.bind({"cmd", "ctrl"}, "E", function()
-	local app = "VimR"
-
-	wf_app = wf.new(false):setAppFilter(app, {currentSpace=true, visible=true})
-
-	local wins = wf_app:getWindows()
-	local count = 0
-	for _ in pairs(wins) do count = count + 1 end
-	
-	if (count > 0)
-	then
-		wf_app:getWindows()[1]:focus()
-	else
-		hs.osascript.applescript(string.format([[
-			tell application "System Events" to tell process "%s"
-			    click menu item "New Window" of menu "File" of menu bar 1
-				set frontmost to true
-			end tell
-		]], app))
-
-	end
-
-end)
+-- hs.hotkey.bind({"cmd", "ctrl"}, "E", function()
+-- 	local app = "VimR"
+-- 
+-- 	wf_app = wf.new(false):setAppFilter(app, {currentSpace=true, visible=true})
+-- 
+-- 	local wins = wf_app:getWindows()
+-- 	local count = 0
+-- 	for _ in pairs(wins) do count = count + 1 end
+-- 	
+-- 	if (count > 0)
+-- 	then
+-- 		wf_app:getWindows()[1]:focus()
+-- 	else
+-- 		hs.osascript.applescript(string.format([[
+-- 			tell application "System Events" to tell process "%s"
+-- 			    click menu item "New Window" of menu "File" of menu bar 1
+-- 				set frontmost to true
+-- 			end tell
+-- 		]], app))
+-- 
+-- 	end
+-- 
+-- end)
 
 -- APP-AGNOSTIC GLOBAL OPEN/FOCUS BINDINGS
 
+-- hs.hotkey.bind({"cmd", "ctrl"}, "E", function() hs.application.open("Emacs") end) 
 hs.hotkey.bind({"cmd", "ctrl"}, "O", function() hs.application.open("Obsidian") end) 
+hs.hotkey.bind({"cmd", "ctrl"}, "R", function() hs.application.open("Obsidian") end) 
+hs.hotkey.bind({"cmd", "ctrl"}, "A", function() hs.application.open("Apebrain") end) 
+hs.hotkey.bind({"cmd", "ctrl"}, "N", function() hs.application.open("Obsidian") end) 
 hs.hotkey.bind({"cmd", "ctrl"}, "C", function() hs.application.open("Numi") end) 
 hs.hotkey.bind({"cmd", "ctrl"}, "S", function() hs.application.open("Signal") end) 
+hs.hotkey.bind({"cmd", "ctrl"}, "G", function() hs.application.open("Godot") end) 
 
 -- Clear clipboard
 
@@ -177,6 +196,34 @@ hs.hotkey.bind({"cmd", "shift", "ctrl"}, "C", function()
 	hs.notify.new({title="Cleared clipboard."}):send()
 end)
 
+
+--------------------------------------
+-- KEY COMBO TO APPLICATION
+-- Sends keystrokes but only if the specified application is focused
+--------------------------------------
+
+function sendKeyComboToApplication(appComboTable)
+
+	for appComboPair in ipairs(appComboTable) do
+
+		app = appComboPair[1]
+		mods = appComboPair[2]
+		key = appComboPair[3]
+		
+		wf_app = wf.new(false):setAppFilter(app, {currentSpace=true, visible=true})
+
+		local wins = wf_app:getWindows()
+		local count = 0
+		for _ in pairs(wins) do count = count + 1 end
+
+		if (count > 0)
+		then
+			hs.eventtap.keyStroke(mods, key)
+		end
+
+	end
+
+end
 
 -------------------
 -- A R C H I V E --
@@ -244,4 +291,4 @@ end)
 -- hs.hotkey.bind(mash, '[', function() hs.window.focusedWindow():move(units.upleft50,   nil, true) end)
 -- hs.hotkey.bind(mash, ';', function() hs.window.focusedWindow():move(units.botleft50,  nil, true) end)
 -- hs.hotkey.bind(mash, "'", function() hs.window.focusedWindow():move(units.botright50, nil, true) end)
--- hs.hotkey.bind(mash, 'm', function() hs.window.focusedWindow():move(units.maximum,    nil, true) end)
+
