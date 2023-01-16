@@ -37,7 +37,6 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'akinsho/toggleterm.nvim', {'tag' : 'v1.*'}
 " Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'jiangmiao/auto-pairs'
@@ -69,7 +68,6 @@ if exists("g:neovide")
 endif
 
 " Start up plugins
-autocmd VimEnter * :COQnow
 autocmd VimEnter * :TSEnable highlight
 
 " Navigation & Shortcuts
