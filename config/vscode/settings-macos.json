@@ -1,0 +1,139 @@
+{
+    "workbench.iconTheme": "material-icon-theme",
+    "editor.fontFamily": "'CaskaydiaCove Nerd Font', Menlo, Monaco, 'Courier New', monospace",
+    "editor.inlineSuggest.enabled": true,
+    "latex-workshop.view.pdf.viewer": "tab",
+    "github.copilot.enable": {
+        "*": false,
+        "yaml": false,
+        "plaintext": false,
+        "markdown": false,
+        "go": false,
+        "python": false,
+        "html": true,
+        "rust": false,
+        "javascript": true,
+        "lua": true,
+        "typescript": false
+    },
+    "svelte.enable-ts-plugin": true,
+    "git.enableSmartCommit": true,
+    "git.confirmSync": false,
+    "terminal.integrated.commandsToSkipShell": [
+        "language-julia.interrupt"
+    ],
+    "editor.guides.bracketPairs": true,
+    "editor.bracketPairColorization.enabled": true,
+    "[scss]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[svelte]": {
+        "editor.defaultFormatter": "svelte.svelte-vscode",
+        "editor.tabSize": 2
+    },
+    "workbench.editor.untitled.hint": "hidden",
+    "[markdown]": {
+        "editor.defaultFormatter": "yzhang.markdown-all-in-one"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "workbench.settings.openDefaultKeybindings": true,
+    "[yaml]": {
+        "editor.defaultFormatter": "SimonSiefke.prettier-vscode"
+    },
+    "editor.fontLigatures": true,
+    "[typescript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "[rust]": {
+        "editor.defaultFormatter": "rust-lang.rust-analyzer"
+    },
+    "julia.enableTelemetry": true,
+    "vscode-neovim.neovimExecutablePaths.darwin": "/opt/homebrew/bin/nvim --noplugin",
+    "workbench.editorAssociations": {
+        "*.wasm": "default",
+        "*.stl": "default"
+    },
+    "workbench.productIconTheme": "material-product-icons",
+    "rust-analyzer.inlayHints.typeHints.enable": false,
+    "rust-analyzer.inlayHints.renderColons": false,
+    "rust-analyzer.inlayHints.chainingHints.enable": false,
+    "rust-analyzer.inlayHints.closingBraceHints.enable": false,
+    "rust-analyzer.inlayHints.parameterHints.enable": false,
+    "update.mode": "manual",
+    "calva.keybindingsEnabled": false,
+    //Add following lines of code to exclude the files & folders which aren't important for watchers to look for changes...
+    //exludes files & folders in search indexing
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/bower_components": true,
+        "**/env": true,
+        "**/venv": true
+    },
+    //exludes files & folders for watcher service
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules/**": true,
+        "**/env/**": true,
+        "**/venv/**": true,
+        "env-*": true
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "arduino.useArduinoCli": true,
+    "arduino.path": "/opt/homebrew/bin/",
+    "arduino.commandPath": "arduino-cli",
+    "workbench.colorCustomizations": {
+        "[Default Dark+]": {
+            // "titleBar.activeBackground": "#883333",
+            // "titleBar.inactiveBackground": "#aa5555"
+            // "titleBar.activeBackground": "#3a6acc",
+            // "titleBar.inactiveBackground": "#4a7add",
+
+            "titleBar.activeBackground": "#202020",
+            "titleBar.border": "#242424",
+            "editor.background": "#141414",
+            "sideBar.background": "#191919",
+            "activityBar.background": "#242424",
+            "tab.inactiveBackground": "#202020",
+            "tab.hoverBackground": "#323232",
+            "statusBar.background": "#191919",
+            "statusBar.noFolderBackground": "#622"
+        }
+    },
+    "go.toolsManagement.autoUpdate": true,
+    "extensions.ignoreRecommendations": true,
+    "svelte.plugin.svelte.note-new-transformation": false,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "window.confirmBeforeClose": "keyboardOnly",
+    "cmake.configureOnOpen": true,
+    "files.associations": {
+        "*.i": "swiglang",
+        "*.hpp": "cpp"
+    },
+    "C_Cpp.clang_format_fallbackStyle": "LLVM",
+    "[c]": {
+
+        "editor.wordBasedSuggestions": false,
+        "editor.suggest.insertMode": "replace",
+        "editor.semanticHighlighting.enabled": true,
+        "editor.quickSuggestions": {
+            "comments": "on",
+            "strings": "on",
+            "other": "on"
+        }
+    },
+    "clangd.path": "/opt/homebrew/opt/llvm/bin/clangd",
+    "julia.symbolCacheDownload": true,
+    "calva.paredit.defaultKeyMap": "strict",
+    "jupyter.askForKernelRestart": false,
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "SimonSiefke.prettier-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "SimonSiefke.prettier-vscode"
+    }
+}

@@ -1,0 +1,24 @@
+#!/usr/bin/env bb
+
+(require '[clojure.string :as str :refer [split]])
+(require '[babashka.tasks :as tasks :refer [shell]])
+
+(def drive-dest "turtlebasket-gdrive:/macbook-air-m1")
+(def paths ["Desktop"
+            "Documents/Personal Knowledge Base"
+            "Documents/Berkeley Notes"])
+
+;; currently not used
+(def exclude ["*.swp" ".git" "node_modules" "__pycache__" ".DS_Store"])
+
+(for [path paths]
+  (future
+    (let [res
+          (shell "rclone" "sync"
+                 path
+                 (format "%s/%s" drive-dest (-> path (split #"/") last))
+                 "--progress" "--retries" 1 "--delete-excluded")]
+      (if (= (get res "exit") 0)
+        (println (format "Backed up %s" path))
+        (println (get res "error"))))))
+         ;; (for [item exclude] (cons "--exclude" item))))

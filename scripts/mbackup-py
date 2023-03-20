@@ -1,0 +1,19 @@
+#!/usr/bin/env python3
+
+from concurrent.futures import ThreadPoolExecutor
+from subprocess import run as srun
+
+DEST="turtlebasket-gdrive:/macbook-air-m1"
+paths=[
+    "Desktop"
+    "Documents/Personal Knowledge Base"
+    "Documents/Berkeley Notes"
+]
+
+with ThreadPoolExecutor(max_workers=4) as executor:
+    for path in paths:
+        fname = path.split("/")[-1]
+        srun("rclone", "sync", 
+            path,
+            f'{DEST}/{fname}',
+            "--progress", "--rertries", 1, "--delete-excluded")
