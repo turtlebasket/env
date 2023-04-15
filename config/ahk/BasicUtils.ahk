@@ -80,9 +80,11 @@ FocusOrOpen(name, launchExec:=-1)
 		Run, %launchExec%
 }
 
-^!e::FocusOrOpen("gvim.exe", "gvim.bat")
+; ^!e::FocusOrOpen("gvim.exe", "gvim.bat")
+^!e::FocusOrOpen("code.exe", "code.cmd")
 ^!v::FocusOrOpen("code.exe", "code.cmd")
 ^!t::FocusOrOpen("windowsterminal.exe", "wt.exe")
 ^!o::FocusOrOpen("Obsidian.exe", "Obsidian")
-^!w::FocusOrOpen("brave.exe")
+^!w::FocusOrOpen("firefox.exe")
+^!s::FocusOrOpen("signal.exe")
 
