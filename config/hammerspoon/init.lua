@@ -1,5 +1,6 @@
 wf=hs.window.filter
-browser = "Brave Browser"
+ffBrowser = "Firefox"
+chromiumBrowser = "Brave Browser"
 -- browser = "Chromium"
 
 -- Open new / focus existing Finder window in current desktop space
@@ -70,10 +71,10 @@ end)
 
 -- Open new / focus existing browser window in current desktop space
 
-hs.hotkey.bind({"cmd", "ctrl"}, "W", function()
+function focusOrOpenFirefox()
 
-	-- wf_browser = wf.new(false):setAppFilter(browser, {currentSpace=true}):setScreens({hs.screen.mainScreen()})
-	wf_browser = wf.new(false):setAppFilter(browser, {currentSpace=true})
+	-- assumes wf_browser is the name of a firefox-based browser
+	wf_browser = wf.new(false):setAppFilter(ffBrowser, {currentSpace=true, visible=true})
 
 	local wins = wf_browser:getWindows()
 	local count = 0
@@ -82,16 +83,45 @@ hs.hotkey.bind({"cmd", "ctrl"}, "W", function()
 	if (count > 0)
 	then
 		wf_browser:getWindows()[1]:focus()
+		print(count)
+	else
+		-- for firefox:
+		hs.osascript.applescript(string.format([[
+			tell application "System Events" to tell process "%s"
+				click menu item "New Window" of menu "File" of menu bar 1
+				set frontmost to true
+			end tell
+		]], ffBrowser))
+	end
+
+end
+
+function focusOrOpenChromium()
+
+	-- assumes wf_browser is the name of a chromium-based browser
+	wf_browser = wf.new(false):setAppFilter(chromiumBrowser, {currentSpace=true, visible=true})
+
+	local wins = wf_browser:getWindows()
+	local count = 0
+	for _ in pairs(wins) do count = count + 1 end
+	
+	if (count > 0)
+	then
+		wf_browser:getWindows()[1]:focus()
+		print(count)
 	else
 		hs.osascript.applescript(string.format([[
 			tell application "%s"
 				make new window
 				activate
 			end tell
-		]], browser))
+		]], chromiumBrowser))
 	end
 
-end)
+end
+
+hs.hotkey.bind({"cmd", "ctrl"}, "W", focusOrOpenChromium)
+
 
 -- CHROMIUM-BASED BROWSERS ONLY: Open new tab to right of current browser
 
@@ -99,7 +129,7 @@ hs.hotkey.bind({"cmd", "option"}, "T", function()
 
 	local focusedAppName = hs.window.focusedWindow():application():title()
 
-	if focusedAppName == browser 
+	if focusedAppName == chromiumBrowser 
 	then
 		hs.osascript.applescript(string.format([[
 			tell application "System Events" to tell process "%s"
@@ -121,18 +151,15 @@ function openVsCode(app)
 	local count = 0
 	for _ in pairs(wins) do count = count + 1 end
 	
-	if (count > 0)
-	then
+	if (count > 0) then
 		wf_app:getWindows()[1]:focus()
 	else
-
-		hs.osascript.applescript(string.format([[
-			tell application "System Events" to tell process "%s"
-			    click menu item "New Window" of menu "File" of menu bar 1
-				set frontmost to true
-			end tell
-		]], app))
-
+        hs.osascript.applescript(string.format([[
+            tell application "System Events" to tell process "%s"
+                click menu item "New Window" of menu "File" of menu bar 1
+                set frontmost to true
+            end tell
+        ]], app))
 	end
 
 end
@@ -142,13 +169,14 @@ hs.hotkey.bind({"cmd", "ctrl"}, "E", function()
 	openVsCode("Code")
 end)
 
-hs.hotkey.bind({"cmd", "ctrl"}, "V", function()
+
+-- hs.hotkey.bind({"cmd", "ctrl"}, "V", function()
 	-- openVsCode("Code")
 	-- openVsCode("VSCodium")
 	
 	-- No neovide function because it doesn't support system events (yet)
-	hs.application.open("Neovide")
-end)
+	-- hs.application.open("Neovide")
+-- end)
 
 
 
@@ -180,14 +208,20 @@ end)
 
 -- APP-AGNOSTIC GLOBAL OPEN/FOCUS BINDINGS
 
--- hs.hotkey.bind({"cmd", "ctrl"}, "E", function() hs.application.open("Emacs") end) 
-hs.hotkey.bind({"cmd", "ctrl"}, "O", function() hs.application.open("Obsidian") end) 
-hs.hotkey.bind({"cmd", "ctrl"}, "R", function() hs.application.open("Obsidian") end) 
-hs.hotkey.bind({"cmd", "ctrl"}, "A", function() hs.application.open("Apebrain") end) 
-hs.hotkey.bind({"cmd", "ctrl"}, "N", function() hs.application.open("Obsidian") end) 
-hs.hotkey.bind({"cmd", "ctrl"}, "C", function() hs.application.open("Numi") end) 
+-- common apps
+-- hs.hotkey.bind({"cmd", "ctrl"}, "Z", function() hs.application.open("Todoist") end) 
+-- hs.hotkey.bind({"cmd", "ctrl"}, "R", function() hs.application.open("Obsidian") end) 
+hs.hotkey.bind({"cmd", "ctrl"}, "M", function() hs.application.open("Spotify") end) 
 hs.hotkey.bind({"cmd", "ctrl"}, "S", function() hs.application.open("Signal") end) 
-hs.hotkey.bind({"cmd", "ctrl"}, "G", function() hs.application.open("Godot") end) 
+hs.hotkey.bind({"cmd", "ctrl"}, "G", function() hs.application.open("Google Calendar") end) 
+hs.hotkey.bind({"cmd", "ctrl"}, "Z", function() hs.application.open("Preview") end) 
+
+-- annoying apps (manually open only)
+hs.hotkey.bind({"cmd", "ctrl"}, "K", function() switchToIfOpen("KiCad") end) 
+hs.hotkey.bind({"cmd", "ctrl"}, "C", function() switchToIfOpen("CLion") end) 
+hs.hotkey.bind({"cmd", "ctrl"}, "J", function() hs.application.open("IntelliJ IDEA CE") end) 
+hs.hotkey.bind({"cmd", "ctrl"}, "I", function() hs.application.open("Insomnia") end) 
+
 
 -- Clear clipboard
 
@@ -196,6 +230,47 @@ hs.hotkey.bind({"cmd", "shift", "ctrl"}, "C", function()
 	hs.notify.new({title="Cleared clipboard."}):send()
 end)
 
+
+--------------------------------------
+-- DESKTOP SWITCHING (axed)
+-- Retroactive note: it should be harder, not easier, to context-switch :P
+--------------------------------------
+
+-- function gotoDesktopNumber(desktop)
+--     local deskstr = string.format("Desktop %d", desktop)
+-- 	local index = 0
+-- 	for item in hs.spaces.spacesForScreen("Main") do
+-- 		if item == deskstr then
+-- 			break
+-- 		else
+-- 			index = index + 1
+-- 		end
+-- 	end
+-- 	print("INDEX ", index)
+-- 	hs.spaces.gotoSpace(index)
+-- end
+-- 
+-- hs.hotkey.bind({"cmd", "ctrl"}, "1", function() gotoDesktopNumber(1) end)
+-- hs.hotkey.bind({"cmd", "ctrl"}, "2", function() gotoDesktopNumber(2) end)
+-- hs.hotkey.bind({"cmd", "ctrl"}, "3", function() gotoDesktopNumber(3) end)
+-- hs.hotkey.bind({"cmd", "ctrl"}, "4", function() gotoDesktopNumber(4) end)
+
+--------------------------------------
+-- SWITCH TO IF OPEN
+-- Switches to application if there's an instance of it open
+--------------------------------------
+
+function switchToIfOpen(app)
+	wf_app = wf.new(false):setAppFilter(app, {currentSpace=true, visible=true})
+
+	local wins = wf_app:getWindows()
+	local count = 0
+	for _ in pairs(wins) do count = count + 1 end
+	
+	if (count > 0) then
+		wf_app:getWindows()[1]:focus()
+    end
+end
 
 --------------------------------------
 -- KEY COMBO TO APPLICATION

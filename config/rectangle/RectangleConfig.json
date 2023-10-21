@@ -47,7 +47,7 @@
 
     },
     "footprintAlpha" : {
-      "float" : 0.30000001192092896
+      "float" : 0.3
     },
     "footprintBorderWidth" : {
       "float" : 2
@@ -65,7 +65,7 @@
       "float" : 0
     },
     "hideMenubarIcon" : {
-      "bool" : false
+      "bool" : true
     },
     "ignoredSnapAreas" : {
       "int" : 0
@@ -146,7 +146,7 @@
       "bool" : false
     },
     "todo" : {
-      "int" : 0
+      "int" : 2
     },
     "todoApplication" : {
 
@@ -164,12 +164,20 @@
       "int" : 0
     },
     "windowSnapping" : {
-      "int" : 1
+      "int" : 2
     }
   },
   "shortcuts" : {
+    "almostMaximize" : {
+      "keyCode" : 43,
+      "modifierFlags" : 1441792
+    },
     "bottomHalf" : {
       "keyCode" : 38,
+      "modifierFlags" : 1441792
+    },
+    "center" : {
+      "keyCode" : 25,
       "modifierFlags" : 1441792
     },
     "centerThird" : {
@@ -183,6 +191,10 @@
     "firstTwoThirds" : {
       "keyCode" : 14,
       "modifierFlags" : 786432
+    },
+    "larger" : {
+      "keyCode" : 24,
+      "modifierFlags" : 1441792
     },
     "lastThird" : {
       "keyCode" : 5,
@@ -200,6 +212,10 @@
       "keyCode" : 46,
       "modifierFlags" : 1441792
     },
+    "maximizeHeight" : {
+      "keyCode" : 29,
+      "modifierFlags" : 1441792
+    },
     "nextDisplay" : {
       "keyCode" : 124,
       "modifierFlags" : 1441792
@@ -210,6 +226,10 @@
     },
     "rightHalf" : {
       "keyCode" : 37,
+      "modifierFlags" : 1441792
+    },
+    "smaller" : {
+      "keyCode" : 27,
       "modifierFlags" : 1441792
     },
     "topHalf" : {
