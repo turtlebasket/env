@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # PROJECT DIR PRUNING SCRIPT
-
+# Lists projects in current directory with a clean git status, 
+# sorted in reverse by date modified
 
 printf "%-40s%-20s%s\n" 'Clean git, oldest to newest' 'Date Modified' 'Size'
 printf "%-40s%-20s%s\n" '===========================' '=============' '===='
