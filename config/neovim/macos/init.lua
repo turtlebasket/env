@@ -32,6 +32,9 @@ o.tabstop = 4
 o.shiftwidth = 4
 o.expandtab = true
 
+-- set wrap if markdown file
+vim.cmd('autocmd FileType markdown setlocal wrap')
+
 -- NOTE: pcall prevents plugin system from shitting itself on first load
 if not pcall(function() 
     c.colorscheme 'catppuccin' 
@@ -116,8 +119,15 @@ return require('packer').startup(function(use)
         }
     end}
 
+    -- use 'martinsione/darkplus.nvim'
+
     -- NOTE: requires Node.js >= 17
     -- use {'github/copilot.vim', run = ':Copilot setup'}
+    --
+    -- Specify Filetype for .python Files
+    vim.api.nvim_exec([[
+      autocmd BufNewFile,BufRead *.sage set filetype=python
+    ]], false)
 
 end)
 

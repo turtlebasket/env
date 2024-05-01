@@ -18,12 +18,13 @@
 - [Rectangle](https://github.com/rxhanson/Rectanglehttps://github.com/rxhanson/Rectangle)
 - [MiddleClick](https://github.com/artginzburg/MiddleClick-BigSur)
 - [LinearMouse](https://linearmouse.org/)
-- [AltTab MacOS](https://github.com/lwouis/alt-tab-macos)
+- [OpenInTerminal](https://github.com/Ji4n1ng/OpenInTerminal)
 
 ### Windows
 
-- AutoHotKey
+- [AutoHotKey v1](https://www.autohotkey.com/download/1.1/)
 - ShareX
 - Powershell Core
 - Windows Terminal
 - WSL (native feature)
+

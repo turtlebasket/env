@@ -83,7 +83,7 @@ function focusOrOpenFirefox()
 	if (count > 0)
 	then
 		wf_browser:getWindows()[1]:focus()
-		print(count)
+		-- print(count)
 	else
 		-- for firefox:
 		hs.osascript.applescript(string.format([[
@@ -108,7 +108,7 @@ function focusOrOpenChromium()
 	if (count > 0)
 	then
 		wf_browser:getWindows()[1]:focus()
-		print(count)
+		-- print(count)
 	else
 		hs.osascript.applescript(string.format([[
 			tell application "%s"
@@ -125,22 +125,22 @@ hs.hotkey.bind({"cmd", "ctrl"}, "W", focusOrOpenChromium)
 
 -- CHROMIUM-BASED BROWSERS ONLY: Open new tab to right of current browser
 
-hs.hotkey.bind({"cmd", "option"}, "T", function()
-
-	local focusedAppName = hs.window.focusedWindow():application():title()
-
-	if focusedAppName == chromiumBrowser 
-	then
-		hs.osascript.applescript(string.format([[
-			tell application "System Events" to tell process "%s"
-				click menu item "New Tab to the Right" of menu "Tab" of menu bar 1
-			end tell
-		]], focusedAppName))
-	else
-		hs.notify.new({title=string.format("%s not focused.", browser)}):send()
-	end
-
-end)
+-- hs.hotkey.bind({"cmd", "option"}, "T", function()
+-- 
+-- 	local focusedAppName = hs.window.focusedWindow():application():title()
+-- 
+-- 	if focusedAppName == chromiumBrowser 
+-- 	then
+-- 		hs.osascript.applescript(string.format([[
+-- 			tell application "System Events" to tell process "%s"
+-- 				click menu item "New Tab to the Right" of menu "Tab" of menu bar 1
+-- 			end tell
+-- 		]], focusedAppName))
+-- 	else
+-- 		hs.notify.new({title=string.format("%s not focused.", browser)}):send()
+-- 	end
+-- 
+-- end)
 
 -- Open new / focus existing vscode window in current desktop space
 -- app = VSCodium or Code
@@ -209,18 +209,23 @@ end)
 -- APP-AGNOSTIC GLOBAL OPEN/FOCUS BINDINGS
 
 -- common apps
--- hs.hotkey.bind({"cmd", "ctrl"}, "Z", function() hs.application.open("Todoist") end) 
+hs.hotkey.bind({"cmd", "ctrl"}, "D", function() hs.application.open("Todoist") end) 
 -- hs.hotkey.bind({"cmd", "ctrl"}, "R", function() hs.application.open("Obsidian") end) 
 hs.hotkey.bind({"cmd", "ctrl"}, "M", function() hs.application.open("Spotify") end) 
-hs.hotkey.bind({"cmd", "ctrl"}, "S", function() hs.application.open("Signal") end) 
 hs.hotkey.bind({"cmd", "ctrl"}, "G", function() hs.application.open("Google Calendar") end) 
 hs.hotkey.bind({"cmd", "ctrl"}, "Z", function() hs.application.open("Preview") end) 
 
--- annoying apps (manually open only)
-hs.hotkey.bind({"cmd", "ctrl"}, "K", function() switchToIfOpen("KiCad") end) 
-hs.hotkey.bind({"cmd", "ctrl"}, "C", function() switchToIfOpen("CLion") end) 
-hs.hotkey.bind({"cmd", "ctrl"}, "J", function() hs.application.open("IntelliJ IDEA CE") end) 
-hs.hotkey.bind({"cmd", "ctrl"}, "I", function() hs.application.open("Insomnia") end) 
+-- annoying apps (must manually open)
+hs.hotkey.bind({"cmd", "ctrl"}, "A", function() switchToIfApplicationOpen("Telegram") end) 
+hs.hotkey.bind({"cmd", "ctrl"}, "S", function() switchToIfApplicationOpen("Signal") end) 
+hs.hotkey.bind({"cmd", "ctrl"}, "N", function() switchToIfApplicationOpen("Numi") end) 
+-- hs.hotkey.bind({"cmd", "ctrl"}, "S", function() switchToIfApplicationOpen("Texts") end) 
+-- hs.hotkey.bind({"cmd", "ctrl", "shift"}, "S", function() hs.application.open("Signal") end) 
+hs.hotkey.bind({"cmd", "ctrl"}, "K", function() switchToIfApplicationOpen("KiCad") end) 
+hs.hotkey.bind({"cmd", "ctrl"}, "C", function() switchToIfApplicationOpen("CLion") end) 
+hs.hotkey.bind({"cmd", "ctrl"}, "J", function() switchToIfApplicationOpen("IntelliJ IDEA") end) 
+-- hs.hotkey.bind({"cmd", "ctrl"}, "L", function() switchToIfApplicationOpen("Linear") end) 
+hs.hotkey.bind({"cmd", "ctrl"}, "L", function() switchToIfApplicationOpen("LTspice") end) 
 
 
 -- Clear clipboard
@@ -260,7 +265,7 @@ end)
 -- Switches to application if there's an instance of it open
 --------------------------------------
 
-function switchToIfOpen(app)
+function switchToIfWindowOpen(app)
 	wf_app = wf.new(false):setAppFilter(app, {currentSpace=true, visible=true})
 
 	local wins = wf_app:getWindows()
@@ -271,6 +276,28 @@ function switchToIfOpen(app)
 		wf_app:getWindows()[1]:focus()
     end
 end
+
+
+--------------------------------------
+-- SWITCH TO IF GLOBALLY OPEN
+-- Switches to application if there's an instance of it open
+--------------------------------------
+
+function switchToIfApplicationOpen(appName)
+    local runningApps = hs.application.runningApplications()
+    local isOpen = false
+    for _, app in pairs(runningApps) do
+        if app:name() == appName then
+            isOpen = true
+            break
+        end
+    end
+
+	if (isOpen) then
+        hs.application.open(appName)
+    end
+end
+
 
 --------------------------------------
 -- KEY COMBO TO APPLICATION
