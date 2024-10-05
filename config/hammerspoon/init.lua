@@ -31,6 +31,25 @@ end)
 -- Open new / focus existing terminal window in current desktop space
 
 -- hs.hotkey.bind({"cmd", "ctrl"}, "T", function()
+--     -- Adjust the app filter to Warp
+--     wf_warp = wf.new(false):setAppFilter("Warp", {currentSpace=true, visible=true})
+-- 
+--     local wins = wf_warp:getWindows()
+--     local count = 0
+--     for _ in pairs(wins) do count = count + 1 end
+-- 
+--     if (count > 0) then
+--         wf_warp:getWindows()[1]:focus()
+--     else
+--         hs.osascript.applescript([[
+--    			tell application "System Events" to tell process "Warp"
+--    				click menu item "New Window" of menu "File" of menu bar 1
+--    			end tell
+--         ]])
+--     end
+-- end)
+
+-- hs.hotkey.bind({"cmd", "ctrl"}, "T", function()
 --  	wf_kitty = wf.new(false):setAppFilter("kitty", {currentSpace=true, visible=true})
 --  	local wins = wf_kitty:getWindows()
 --  	local count = 0
@@ -124,7 +143,7 @@ hs.hotkey.bind({"cmd", "ctrl"}, "W", focusOrOpenChromium)
 
 
 -- CHROMIUM-BASED BROWSERS ONLY: Open new tab to right of current browser
-
+-- NOTE: currently replaced with binding in chromiumsystem settings
 -- hs.hotkey.bind({"cmd", "option"}, "T", function()
 -- 
 -- 	local focusedAppName = hs.window.focusedWindow():application():title()
@@ -142,8 +161,9 @@ hs.hotkey.bind({"cmd", "ctrl"}, "W", focusOrOpenChromium)
 -- 
 -- end)
 
+
 -- Open new / focus existing vscode window in current desktop space
--- app = VSCodium or Code
+-- app = VSCodium, Code, or Cursor
 function openVsCode(app)
 	wf_app = wf.new(false):setAppFilter(app, {currentSpace=true, visible=true})
 
@@ -164,8 +184,43 @@ function openVsCode(app)
 
 end
 
+
+-- superbinding to use both cursor and vscode
+-- try to focus cursor (primarily) or vscode (secondarily), then open cursor if neither is open
+function tryFocusCursorOrVSCodeThenOpenCursor()
+	wf_cursor= wf.new(false):setAppFilter("Cursor", {currentSpace=true, visible=true})
+	wf_vscode= wf.new(false):setAppFilter("Code", {currentSpace=true, visible=true})
+
+	local cursor_wins = wf_cursor:getWindows()
+	local cursor_count = 0
+	for _ in pairs(cursor_wins) do cursor_count = cursor_count + 1 end
+
+	local vscode_wins = wf_vscode:getWindows()
+	local vscode_count = 0
+	for _ in pairs(vscode_wins) do vscode_count = vscode_count + 1 end
+
+	if (cursor_count > 0) then
+		wf_cursor:getWindows()[1]:focus()
+	elseif (vscode_count > 0) then
+		wf_vscode:getWindows()[1]:focus()
+	else
+        hs.osascript.applescript(string.format([[
+            tell application "System Events" to tell process "%s"
+                click menu item "New Window" of menu "File" of menu bar 1
+                set frontmost to true
+            end tell
+        ]], "Cursor"))
+	end
+
+end
+
 hs.hotkey.bind({"cmd", "ctrl"}, "E", function()
-	-- openVsCode("VSCodium")
+	-- openVsCode("Cursor")
+	-- openVsCode("Code")
+	tryFocusCursorOrVSCodeThenOpenCursor()
+end)
+
+hs.hotkey.bind({"cmd", "ctrl"}, "V", function()
 	openVsCode("Code")
 end)
 
@@ -209,11 +264,11 @@ end)
 -- APP-AGNOSTIC GLOBAL OPEN/FOCUS BINDINGS
 
 -- common apps
-hs.hotkey.bind({"cmd", "ctrl"}, "D", function() hs.application.open("Todoist") end) 
 -- hs.hotkey.bind({"cmd", "ctrl"}, "R", function() hs.application.open("Obsidian") end) 
 hs.hotkey.bind({"cmd", "ctrl"}, "M", function() hs.application.open("Spotify") end) 
 hs.hotkey.bind({"cmd", "ctrl"}, "G", function() hs.application.open("Google Calendar") end) 
 hs.hotkey.bind({"cmd", "ctrl"}, "Z", function() hs.application.open("Preview") end) 
+hs.hotkey.bind({"cmd", "ctrl"}, "C", function() hs.application.open("Open WebUI") end) 
 
 -- annoying apps (must manually open)
 hs.hotkey.bind({"cmd", "ctrl"}, "A", function() switchToIfApplicationOpen("Telegram") end) 
@@ -222,7 +277,7 @@ hs.hotkey.bind({"cmd", "ctrl"}, "N", function() switchToIfApplicationOpen("Numi"
 -- hs.hotkey.bind({"cmd", "ctrl"}, "S", function() switchToIfApplicationOpen("Texts") end) 
 -- hs.hotkey.bind({"cmd", "ctrl", "shift"}, "S", function() hs.application.open("Signal") end) 
 hs.hotkey.bind({"cmd", "ctrl"}, "K", function() switchToIfApplicationOpen("KiCad") end) 
-hs.hotkey.bind({"cmd", "ctrl"}, "C", function() switchToIfApplicationOpen("CLion") end) 
+-- hs.hotkey.bind({"cmd", "ctrl"}, "C", function() switchToIfApplicationOpen("CLion") end) 
 hs.hotkey.bind({"cmd", "ctrl"}, "J", function() switchToIfApplicationOpen("IntelliJ IDEA") end) 
 -- hs.hotkey.bind({"cmd", "ctrl"}, "L", function() switchToIfApplicationOpen("Linear") end) 
 hs.hotkey.bind({"cmd", "ctrl"}, "L", function() switchToIfApplicationOpen("LTspice") end) 
