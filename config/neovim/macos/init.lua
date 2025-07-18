@@ -37,7 +37,8 @@ vim.cmd('autocmd FileType markdown setlocal wrap')
 
 -- NOTE: pcall prevents plugin system from shitting itself on first load
 if not pcall(function() 
-    c.colorscheme 'catppuccin' 
+    -- c.colorscheme 'catppuccin' 
+    c.colorscheme "vscode"
 end) then
     print("Failed to load colorscheme - probably has not been installed")
 end
@@ -85,12 +86,12 @@ return require('packer').startup(function(use)
     -- Editor
     use {'neovim/nvim-lspconfig', config = function()
         local lspc = require('lspconfig')
-        lspc['pyright'].setup{}
-        lspc['tsserver'].setup{}
-        lspc['clojure_lsp'].setup{}
-        lspc['racket_langserver'].setup{}
-        lspc['rust_analyzer'].setup{}
-        lspc['gopls'].setup{}
+        -- lspc['pyright'].setup{}
+        -- lspc['tsserver'].setup{}
+        -- lspc['clojure_lsp'].setup{}
+        -- lspc['racket_langserver'].setup{}
+        -- lspc['rust_analyzer'].setup{}
+        -- lspc['gopls'].setup{}
     end}
     use 'hrsh7th/cmp-nvim-lsp'
     use {'hrsh7th/nvim-cmp', config = function()
@@ -102,32 +103,31 @@ return require('packer').startup(function(use)
         }
     end}
 
-    -- use {'ms-jpq/chadtree', branch = 'chad'}
-    use {"nvim-tree/nvim-tree.lua", config = function()
-        require("nvim-tree").setup()
-    end}
+    use {"nvim-tree/nvim-tree.lua"}
     use {"nvim-tree/nvim-web-devicons"}
+    require("nvim-tree").setup()
 
     use 'nvim-lua/plenary.nvim'
     use 'nvim-telescope/telescope.nvim'
-    use {"akinsho/toggleterm.nvim", tag = '*', config = function()
-        require("toggleterm").setup()
-    end}
+    use {"akinsho/toggleterm.nvim", tag = '*'}
+    require("toggleterm").setup()
     use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate', config = function()
         require'nvim-treesitter.configs'.setup{
             highlight = {enable = true}
         }
     end}
 
-    -- use 'martinsione/darkplus.nvim'
+    -- vscode theme
+    use 'Mofiqul/vscode.nvim'
 
     -- NOTE: requires Node.js >= 17
     -- use {'github/copilot.vim', run = ':Copilot setup'}
-    --
+
+
     -- Specify Filetype for .python Files
-    vim.api.nvim_exec([[
-      autocmd BufNewFile,BufRead *.sage set filetype=python
-    ]], false)
+    -- vim.api.nvim_exec([[
+    --   autocmd BufNewFile,BufRead *.sage set filetype=python
+    -- ]], false)
 
 end)
 
