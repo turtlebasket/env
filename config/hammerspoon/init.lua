@@ -114,7 +114,7 @@ function focusOrOpeniTerm()
 	end
 end
 
-hs.hotkey.bind({ "cmd", "ctrl" }, "T", focusOrOpeniTerm)
+hs.hotkey.bind({ "cmd", "ctrl" }, "T", focusOrOpenGhostty)
 
 --------------------------------------------------------------------
 -- Open new / focus existing browser window in current desktop space
@@ -369,8 +369,6 @@ hs.hotkey.bind({ "cmd", "shift" }, "space", function()
                     click menu item "New Tab to the Right" of menu "Tab" of menu bar 1
                 end tell
                 
-                delay 0.01
-                
                 set URL of active tab of front window to "https://perplexity.ai"
             end if
         end tell
@@ -378,6 +376,34 @@ hs.hotkey.bind({ "cmd", "shift" }, "space", function()
 		chromiumBrowser,
 		chromiumBrowser
 	))
+end)
+
+-- Open new / focus existing Discord window in current desktop space
+
+hs.hotkey.bind({ "cmd", "ctrl" }, "R", function()
+	local app = "Discord"
+
+	wf_app = wf.new(false):setAppFilter(app, { currentSpace = true })
+
+	local wins = wf_app:getWindows()
+	local count = 0
+	for _ in pairs(wins) do
+		count = count + 1
+	end
+
+	if count > 0 then
+		wf_app:getWindows()[1]:focus()
+	else
+		hs.osascript.applescript(string.format(
+			[[
+            tell application "System Events" to tell process "%s"
+                click menu item "New Window" of menu "File" of menu bar 1
+                set frontmost to true
+            end tell
+        ]],
+			app
+		))
+	end
 end)
 
 ---------------------------------------------------------------------------
