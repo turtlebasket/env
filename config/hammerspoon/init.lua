@@ -228,9 +228,16 @@ end
 
 -- superbinding to use multiple editors with a preferred order
 -- e.g. try to focus cursor (primarily) or vscode (secondarily), then open cursor if neither is open
-function tryFocusAnEditorThenOpenCursor()
+function tryFocusAnEditorInPreferredOrder()
+	wf_zed = wf.new(false):setAppFilter("Zed", { currentSpace = true, visible = true })
 	wf_cursor = wf.new(false):setAppFilter("Cursor", { currentSpace = true, visible = true })
 	wf_vscode = wf.new(false):setAppFilter("Code", { currentSpace = true, visible = true })
+
+	local zed_wins = wf_zed:getWindows()
+	local zed_count = 0
+	for _ in pairs(zed_wins) do
+		zed_count = zed_count + 1
+	end
 
 	local cursor_wins = wf_cursor:getWindows()
 	local cursor_count = 0
@@ -244,7 +251,9 @@ function tryFocusAnEditorThenOpenCursor()
 		vscode_count = vscode_count + 1
 	end
 
-	if cursor_count > 0 then
+	if zed_count > 0 then
+		wf_zed:getWindows()[1]:focus()
+    elseif cursor_count > 0 then
 		wf_cursor:getWindows()[1]:focus()
 	elseif vscode_count > 0 then
 		wf_vscode:getWindows()[1]:focus()
@@ -256,7 +265,7 @@ function tryFocusAnEditorThenOpenCursor()
                 set frontmost to true
             end tell
         ]],
-			"Cursor"
+			"Zed"
 		))
 	end
 end
@@ -264,7 +273,7 @@ end
 hs.hotkey.bind({ "cmd", "ctrl" }, "E", function()
 	-- openVsCode("Cursor")
 	-- openVsCode("Code")
-	tryFocusAnEditorThenOpenCursor()
+	tryFocusAnEditorInPreferredOrder()
 end)
 
 -- hs.hotkey.bind({"cmd", "ctrl"}, "E", function()
@@ -339,11 +348,11 @@ hs.hotkey.bind({ "cmd", "shift", "ctrl" }, "C", function()
 	hs.notify.new({ title = "Cleared clipboard." }):send()
 end)
 
--- open Perplexity in Brave-based browser
--- 1. if perplexity is already open in most recent Brave window, switch to it and open
---    perplexity in new tab to the right
--- 2. if not, switch to most recent Brave window and open perplexity
-hs.hotkey.bind({ "cmd", "shift" }, "space", function()
+-- open Perplexity in Chromium-based browser
+-- 1. if chatgpt is already open in most recent Brave window, switch to it and open
+--    chatgpt in new tab to the right
+-- 2. if not, switch to most recent Brave window and open chatgpt
+hs.hotkey.bind({ "cmd", "ctrl", "shift" }, "space", function()
 	hs.osascript.applescript(string.format(
 		[[
         tell application "%s"
@@ -355,7 +364,7 @@ hs.hotkey.bind({ "cmd", "shift" }, "space", function()
             set foundTab to false
             set tabIndex to 0
             repeat with i from 1 to (count of tabs of front window)
-                if URL of tab i of front window contains "perplexity.ai" then
+                if URL of tab i of front window contains "chatgpt.com" then
                     set foundTab to true
                     set tabIndex to i
                     exit repeat
@@ -369,41 +378,13 @@ hs.hotkey.bind({ "cmd", "shift" }, "space", function()
                     click menu item "New Tab to the Right" of menu "Tab" of menu bar 1
                 end tell
                 
-                set URL of active tab of front window to "https://perplexity.ai"
+                set URL of active tab of front window to "https://chatgpt.com"
             end if
         end tell
     ]],
 		chromiumBrowser,
 		chromiumBrowser
 	))
-end)
-
--- Open new / focus existing Discord window in current desktop space
-
-hs.hotkey.bind({ "cmd", "ctrl" }, "R", function()
-	local app = "Discord"
-
-	wf_app = wf.new(false):setAppFilter(app, { currentSpace = true })
-
-	local wins = wf_app:getWindows()
-	local count = 0
-	for _ in pairs(wins) do
-		count = count + 1
-	end
-
-	if count > 0 then
-		wf_app:getWindows()[1]:focus()
-	else
-		hs.osascript.applescript(string.format(
-			[[
-            tell application "System Events" to tell process "%s"
-                click menu item "New Window" of menu "File" of menu bar 1
-                set frontmost to true
-            end tell
-        ]],
-			app
-		))
-	end
 end)
 
 ---------------------------------------------------------------------------

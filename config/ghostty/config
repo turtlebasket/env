@@ -6,9 +6,14 @@ font-family = MesloLGS NF
 font-size = 13
 cursor-style = block
 shell-integration-features = no-cursor
-window-width = 152
-window-height = 48
+window-width = 162
+window-height = 50
 term = xterm-256color
+
+# USE PRERELEASE
+# > While you can set this setting back to `stable` at any time, this will only take effect when a later stable 
+# > release is available. If you want to downgrade back to the previous stable release, you must re-download Ghostty.
+auto-update-channel = tip
 
 # window-inherit-working-directory = false
 
