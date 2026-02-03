@@ -1,0 +1,70 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  "project_panel": {
+    "hide_hidden": false,
+  },
+  "features": {
+    "edit_prediction_provider": "copilot",
+  },
+  "agent_ui_font_size": 15.0,
+  "toolbar": {
+    "breadcrumbs": true,
+    "code_actions": false,
+  },
+  "git_panel": {
+    "tree_view": true,
+  },
+  "ui_font_family": ".SystemUIFont",
+  "icon_theme": "Material Icon Theme",
+  "agent_servers": {
+    "opencode": {
+      "type": "registry",
+    },
+  },
+  "buffer_font_family": "CaskaydiaCove Nerd Font",
+  "session": {
+    "trust_all_worktrees": true,
+  },
+  "vim_mode": true,
+  "terminal": {
+    "font_family": "MesloLGS NF",
+  },
+  "base_keymap": "VSCode",
+  "ui_font_size": 14.0,
+  "buffer_font_size": 12.0,
+  "file_types": {
+    "Jinja2": ["*.j2"],
+    "YAML": ["*.yml.template", "*.yaml.template"],
+  },
+  "theme": {
+    "mode": "system",
+    "light": "Ayu Light",
+    "dark": "VSCode Dark Modern",
+  },
+  "theme_overrides": {
+    "VSCode Dark Modern": {
+      "editor.background": "#121212",
+      "editor.active_line.background": "#1f1f1f",
+      "tab_bar.background": "#121212",
+      "tab.active_background": "#262626",
+      "terminal.background": "#141414",
+      "panel.background": "#161616",
+      "text": "#fff",
+      "text.muted": "#ddd",
+      "toolbar.background": "#171717",
+      "editor.gutter.background": "#171717",
+      "border": "#444",
+      "version_control.deleted": "#f11",
+      "version_control.added": "#2e1",
+      "version_control.conflict": "#e1f",
+      "version_control.modified": "#08f",
+    },
+  },
+}
