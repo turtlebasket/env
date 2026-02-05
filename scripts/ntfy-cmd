@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 #
-# ntfy-me — run any command, then send ntfy success/failure notification (via curl)
+# ntfy-cmd — run any command, then send ntfy success/failure notification (via curl)
 #
 # Usage:
-#   ntfy-me <command> [args...]
+#   ntfy-cmd <command> [args...]
 #
 # Example:
-#   ntfy-me make build
-#   ntfy-me bash -c "sleep 10 && false"
-#   ntfy-me ls /nonexistent
+#   ntfy-cmd make build
+#   ntfy-cmd bash -c "sleep 10 && false"
+#   ntfy-cmd ls /nonexistent
 #
 # Notes:
 #   - Requires $NTFY_ME_TOPIC set (e.g., mytopic)
@@ -76,3 +76,4 @@ curl -fsS -X POST \
      "$NTFY_HOST/$NTFY_ME_TOPIC" >/dev/null 2>&1 || echo "Warning: failed to send ntfy notification" >&2
 
 exit $code
+
