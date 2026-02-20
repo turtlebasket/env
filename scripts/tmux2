@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# simple wrapper for tmux that creates a new session for current directory if one doesn't exist
+# meant for scoping sessions by /Projects/<project-name>/
+
+session="$(basename "$PWD")"
+
+tmux has-session -t "$session" 2>/dev/null
+if [[ $? -eq 0 ]]; then
+    exec tmux attach -t "$session"
+else
+    exec tmux new -s "$session"
+fi

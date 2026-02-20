@@ -1,4 +1,4 @@
-// Place your key bindings in this file to override the defaultsauto[]
+// Place your key bindings in this file to override the defaults
 [
   {
     "key": "cmd+1",
@@ -141,6 +141,10 @@
     "command": "workbench.action.focusLastEditorGroup"
   },
   {
+    "key": "cmd+h",
+    "command": "workbench.action.toggleAuxiliaryBar"
+  },
+  {
     "key": "cmd+g",
     "command": "git-graph.view"
   },
@@ -212,8 +216,45 @@
     "when": "viewContainer.workbench.view.explorer.enabled"
   },
   {
-    "key": "cmd+h",
-    "command": "-editor.action.simpleInlineDiffs.rejectAll",
-    "when": "editorTextFocus && hasDisplayedSimpleDiff"
+    "key": "shift+cmd+i",
+    "command": "composerMode.chat"
+  },
+  {
+    "key": "shift+cmd+i",
+    "command": "-composer.newAgentChat"
+  },
+  {
+    "key": "cmd+; shift+cmd+i",
+    "command": "-testing.toggleInlineCoverage"
+  },
+  {
+    "key": "shift+cmd+i",
+    "command": "-workbench.panel.chatEditing",
+    "when": "workbench.panel.chat.view.edits.active"
+  },
+  {
+    "key": "shift+cmd+g",
+    "command": "-editor.action.previousMatchFindAction",
+    "when": "activeEditorIsReviewChanges || editorFocus"
+  },
+  {
+    "key": "shift+cmd+g",
+    "command": "-planEditor.findPrevious",
+    "when": "markdownPlanEditorActive"
+  },
+  {
+    "key": "shift+cmd+g",
+    "command": "-workbench.action.terminal.findPrevious",
+    "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocusInAny && terminalHasBeenCreated || terminalFocusInAny && terminalProcessSupported"
+  },
+  {
+    "key": "shift+cmd+g",
+    "command": "workbench.view.scm",
+    "when": "workbench.scm.active"
+  },
+  {
+    "key": "ctrl+shift+g",
+    "command": "-workbench.view.scm",
+    "when": "workbench.scm.active"
   }
 ]

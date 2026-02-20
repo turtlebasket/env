@@ -10,10 +10,14 @@ window-width = 162
 window-height = 50
 term = xterm-256color
 
+# reduce dimming for unfocused split panes (1.0 disables dimming)
+unfocused-split-opacity = 0.88
+
 # USE PRERELEASE
 # > While you can set this setting back to `stable` at any time, this will only take effect when a later stable 
 # > release is available. If you want to downgrade back to the previous stable release, you must re-download Ghostty.
 auto-update-channel = tip
+auto-update = off
 
 # window-inherit-working-directory = false
 
@@ -32,4 +36,3 @@ keybind = cmd+b>l=goto_split:right
 keybind = cmd+b>h=goto_split:left
 keybind = cmd+b>k=goto_split:up
 keybind = cmd+b>j=goto_split:down
-

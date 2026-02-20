@@ -1,6 +1,0 @@
-wget https://dl.google.com/android/repository/commandlinetools-mac-9123335_latest.zip -O ~/Downloads/as-mac-cli-tools.zip
-
-mkdir -p ~/opt
-
-
-
