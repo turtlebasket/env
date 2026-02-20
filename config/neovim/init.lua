@@ -2,65 +2,54 @@
 -- git clone --filter=blob:none https://github.com/folke/lazy.nvim.git --branch=stable \
 --   ~/.local/share/nvim/lazy/lazy.nvim
 
--- NOTE: if vscode-neovim is active, exit early for stock behavior.
 if vim.g.vscode then
   return
 end
 
--- aliases
-local o = vim.o
-local c = vim.cmd
-local map = vim.api.nvim_set_keymap
-
--- leader keys
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
--- options
-o.termguicolors = true
-o.mouse = 'a'
-o.smartindent = true
-o.wrap = false
-o.relativenumber = true
-o.tabstop = 4
-o.shiftwidth = 4
-o.expandtab = true
+local opt = vim.opt
+opt.termguicolors = true
+opt.mouse = 'a'
+opt.smartindent = true
+opt.wrap = false
+opt.relativenumber = true
+opt.tabstop = 4
+opt.shiftwidth = 4
+opt.expandtab = true
 
--- Prefer LSP semantic tokens over treesitter captures when both exist.
 vim.hl.priorities.semantic_tokens = 140
 vim.hl.priorities.treesitter = 100
 
--- ensure .svelte files are detected correctly
-vim.filetype.add({
-  extension = {
-    svelte = 'svelte',
-  },
-})
+vim.filetype.add({ extension = { svelte = 'svelte' } })
+vim.api.nvim_create_autocmd('FileType', { pattern = 'markdown', command = 'setlocal wrap' })
 
--- set wrap if markdown file
-vim.cmd('autocmd FileType markdown setlocal wrap')
+local function map(mode, lhs, rhs)
+  vim.keymap.set(mode, lhs, rhs, { silent = true })
+end
 
--- keybinds
-map('n', '<c-b>', ':NvimTreeToggle<cr>', { silent = true })
+for _, m in ipairs({
+  { 'n', '<c-b>', '<cmd>NvimTreeToggle<cr>' },
+  { 'n', '<c-`>', '<cmd>ToggleTerm direction="float"<cr>' },
+  { 't', '<c-`>', '<cmd>ToggleTerm<cr>' },
+  { 'n', '<leader>gs', '<cmd>Telescope git_status<cr>' },
+  { 'n', '<leader>gc', '<cmd>Telescope git_commits<cr>' },
+  { 'n', '<leader>:', '<cmd>Telescope commands<cr>' },
+  { 'n', '<leader><leader>', '<cmd>Telescope find_files<cr>' },
+  { 'n', '<leader>f', '<cmd>Telescope grep_string<cr>' },
+  { 'n', '<leader>b', '<cmd>Telescope buffers<cr>' },
+  { 'n', 'B', '<cmd>Telescope buffers<cr>' },
+  { 'n', '<leader>e', vim.diagnostic.open_float },
+  { 'n', '\\', vim.lsp.buf.hover },
+  { 'n', '<a-k>', '<cmd>GitGutterPrevHunk<cr>' },
+  { 'n', '<a-j>', '<cmd>GitGutterNextHunk<cr>' },
+  { 'n', '<c-h>', '<cmd>bp<cr>' },
+  { 'n', '<c-l>', '<cmd>bn<cr>' },
+}) do
+  map(m[1], m[2], m[3])
+end
 
-map('n', '<c-`>', ':ToggleTerm direction="float"<cr>', { silent = true })
-map('t', '<c-`>', '<Cmd>:ToggleTerm<cr>', { silent = true })
-
-map('n', '<leader>gs', ':Telescope git_status<cr>', { silent = true })
-map('n', '<leader>gc', ':Telescope git_commits<cr>', { silent = true })
-map('n', '<leader>:', ':Telescope commands<cr>', { silent = true })
-map('n', '<leader><leader>', ':Telescope find_files<cr>', { silent = true })
-map('n', '<leader>f', ':Telescope grep_string<cr>', { silent = true })
-map('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<cr>', { silent = true })
-
-map('n', '<a-k>', ':GitGutterPrevHunk<cr>', { silent = true })
-map('n', '<a-j>', ':GitGutterNextHunk<cr>', { silent = true })
-
--- buffer management
-map('n', '<c-h>', ':bp<cr>', { silent = true })
-map('n', '<c-l>', ':bn<cr>', { silent = true })
-
--- lazy.nvim bootstrap
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -80,64 +69,61 @@ require('lazy').setup({
     name = 'vscode',
     priority = 1000,
     lazy = false,
-    config = function()
-      require('vscode').setup({
-        transparent = true,
-      })
-    end,
+    config = function() require('vscode').setup({ transparent = true }) end,
   },
   { 'airblade/vim-gitgutter' },
   {
     'nvim-lualine/lualine.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
-    config = function()
-      require('lualine').setup({
-        options = {
-          theme = 'vscode',
-          globalstatus = true,
-        },
-      })
-    end,
+    config = function() require('lualine').setup({ options = { theme = 'vscode', globalstatus = true } }) end,
   },
   {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     config = function()
-      local treesitter = require('nvim-treesitter')
       local wanted = { 'svelte', 'javascript', 'typescript', 'html', 'css' }
-      treesitter.setup({})
+      local ts_runtime = vim.fn.stdpath('data') .. '/lazy/nvim-treesitter/runtime'
+      if vim.loop.fs_stat(ts_runtime) then
+        vim.opt.rtp:append(ts_runtime)
+      end
+      require('nvim-treesitter').setup({ install_dir = vim.fn.stdpath('data') .. '/site' })
 
       vim.api.nvim_create_autocmd('FileType', {
         pattern = wanted,
-        callback = function()
-          pcall(vim.treesitter.start)
-        end,
+        callback = function() pcall(vim.treesitter.start) end,
       })
     end,
   },
   {
     'neovim/nvim-lspconfig',
     config = function()
-      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+      local capabilities = vim.tbl_deep_extend(
+        'force',
+        vim.lsp.protocol.make_client_capabilities(),
+        require('cmp_nvim_lsp').default_capabilities()
+      )
 
-      vim.lsp.config('pyright', { capabilities = capabilities })
-      vim.lsp.config('ts_ls', { capabilities = capabilities })
-      vim.lsp.config('svelte', { capabilities = capabilities })
-      vim.lsp.config('rust_analyzer', { capabilities = capabilities })
+      local function on_attach(client, bufnr)
+        if client.server_capabilities.semanticTokensProvider then
+          vim.lsp.semantic_tokens.start(bufnr, client.id)
+        end
+      end
 
-      vim.lsp.enable('pyright')
-      vim.lsp.enable('ts_ls')
-      vim.lsp.enable('svelte')
-      vim.lsp.enable('rust_analyzer')
+      local defaults = {
+        capabilities = capabilities,
+        on_attach = on_attach,
+      }
+      local servers = {
+        basedpyright = {},
+        ts_ls = {},
+        svelte = {},
+        rust_analyzer = {},
+      }
 
-      vim.api.nvim_create_autocmd('LspAttach', {
-        callback = function(args)
-          local client = vim.lsp.get_client_by_id(args.data.client_id)
-          if client and client.server_capabilities.semanticTokensProvider then
-            vim.lsp.semantic_tokens.start(args.buf, client.id)
-          end
-        end,
-      })
+      for server, opts in pairs(servers) do
+        vim.lsp.config(server, vim.tbl_deep_extend('force', defaults, opts))
+        vim.lsp.enable(server)
+      end
     end,
   },
   { 'hrsh7th/cmp-nvim-lsp' },
@@ -147,35 +133,69 @@ require('lazy').setup({
     config = function()
       local cmp = require('cmp')
       cmp.setup({
-        sources = {
-          { name = 'nvim_lsp' },
+        mapping = {
+          ['<C-n>'] = cmp.mapping(function()
+            if cmp.visible() then
+              cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+            else
+              cmp.complete()
+            end
+          end, { 'i', 's' }),
+          ['<C-p>'] = cmp.mapping(function()
+            if cmp.visible() then
+              cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
+            end
+          end, { 'i', 's' }),
+          ['<CR>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.confirm({ select = true })
+            else
+              fallback()
+            end
+          end, { 'i', 's' }),
         },
+        sources = { { name = 'nvim_lsp' } },
       })
     end,
   },
   {
     'nvim-tree/nvim-tree.lua',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
-    config = function()
-      require('nvim-tree').setup({ view = { width = 42 } })
-    end,
+    config = function() require('nvim-tree').setup({ view = { width = 42 } }) end,
   },
   {
     'nvim-telescope/telescope.nvim',
-    dependencies = { 'nvim-lua/plenary.nvim' },
+    dependencies = { 'nvim-lua/plenary.nvim', 'nvim-telescope/telescope-fzf-native.nvim' },
+    config = function()
+      local actions = require('telescope.actions')
+      require('telescope').setup({
+        defaults = {
+          mappings = {
+            i = {
+              ['<Esc>'] = actions.close,
+            },
+          },
+        },
+        extensions = {
+          fzf = {
+            fuzzy = true,
+            override_generic_sorter = true,
+            override_file_sorter = true,
+            case_mode = 'smart_case',
+          },
+        },
+      })
+      require('telescope').load_extension('fzf')
+    end,
   },
+  { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
   {
     'akinsho/toggleterm.nvim',
     version = '*',
-    config = function()
-      require('toggleterm').setup()
-    end,
+    config = function() require('toggleterm').setup() end,
   },
 })
 
--- NOTE: pcall prevents plugin system errors on first load
-if not pcall(function()
-  c.colorscheme('vscode')
-end) then
+if not pcall(vim.cmd.colorscheme, 'vscode') then
   print('Failed to load colorscheme - probably has not been installed')
 end
