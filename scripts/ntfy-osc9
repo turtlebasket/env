@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# ntfy-bell - run a command, forwarding OSC 9 notifications and BEL to ntfy
+# ntfy-bell - run a command, forwarding OSC 9 notifications to ntfy
 #
 # Usage:
 #   ntfy-bell <command> [args...]
@@ -102,9 +102,9 @@ def _copy_winsize(src_fd: int, dst_fd: int) -> None:
 
 
 def main() -> int:
-    topic = os.environ.get("BELL2NTFY_TOPIC")
+    topic = os.environ.get("NTFY_ME_TOPIC")
     if not topic:
-        print("Error: environment variable BELL2NTFY_TOPIC not set", file=sys.stderr)
+        print("Error: environment variable NTFY_ME_TOPIC not set", file=sys.stderr)
         return 2
 
     if len(sys.argv) < 2:
@@ -155,7 +155,6 @@ def main() -> int:
         signal.signal(signal.SIGWINCH, _on_winch)
 
     osc_last_sent = 0.0
-    bel_last_sent = 0.0
     cooldown_s = 1.5
     parse_buf = bytearray()
     stdin_eof_sent = False
@@ -220,19 +219,6 @@ def main() -> int:
                                 topic=topic,
                                 title="Terminal notification",
                                 message=msg if msg else f"OSC 9 notification from: {' '.join(cmd)}",
-                            )
-                        except Exception:
-                            pass
-
-                if bytes([BEL]) in data and parse_buf.find(OSC9_PREFIX) == -1:
-                    now = time.time()
-                    if now - bel_last_sent >= cooldown_s:
-                        bel_last_sent = now
-                        try:
-                            notify_ntfy(
-                                topic=topic,
-                                title="Terminal bell",
-                                message=f"BEL from: {' '.join(cmd)}",
                             )
                         except Exception:
                             pass
