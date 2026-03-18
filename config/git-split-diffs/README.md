@@ -16,6 +16,10 @@ Copy JSON themes to `~/.git-split-diffs-themes`, then:
 
 ```bash
 git config --global split-diffs.theme-directory ~/.git-split-diffs-themes
-git config --global split-diffs.theme-name transparent
+git config --global split-diffs.theme-name transparent-dark
 ```
 
+Available themes:
+
+- `transparent-dark`
+- `transparent-light`
